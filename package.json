@@ -1,0 +1,20 @@
+{
+  "name": "react-highlighter",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "node test/"
+  },
+  "dependencies": {
+    "hyperscript-helpers": "^3.0.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-hyperscript": "^3.2.0",
+    "react-traverse": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "tape": "^4.11.0"
+  }
+}
