@@ -66,8 +66,12 @@ function checkToken(nodeValue, token, classList, sensitiveSearch) {
   return go([], nodeValue, true);
 }
 
+const defaultToken = tokenFactory({});
+const defaultHighlighter = (dom, text) => highlighterFactory({})([defaultToken(text)])(dom);
+
 module.exports = {
   tokenFactory,
   highlighterFactory,
-  defaultHighlighter: (dom, text) => highlighterFactory({})([tokenFactory({})(text)])(dom)
+  defaultToken,
+  defaultHighlighter
 };

@@ -2,7 +2,14 @@ const test = require('tape');
 const h = require('react-hyperscript');
 const { i, ul, li, div, span } = require('hyperscript-helpers')(h);
 const ReactDOMServer = require('react-dom/server');
-const { defaultHighlighter, tokenFactory, highlighterFactory } = require('..');
+const {
+  defaultToken,
+  defaultHighlighter,
+  tokenFactory,
+  highlighterFactory
+} = require('..');
+
+
 const foo = () => div('', span('', 'foo'));
 const highlightedFoo = className => div('', span('', i(className, 'foo')));
 
@@ -41,7 +48,7 @@ test('it can highlight', t => {
 test('it can highlight case-sensitive', t => {
   t.plan(2);
 
-  let token = tokenFactory({})('buzz');
+  let token = defaultToken('buzz');
   let highlighted = highlighterFactory({ sensitiveSearch: true })([token])(original);
   const expected = ul('', [
     li({ key: '1' }, 'foo'),
@@ -97,7 +104,7 @@ test('it can highlight with custom class names', t => {
 
   domsRenderEqually(t, highlighted, expected);
 
-  token = tokenFactory({})('buzz');
+  token = defaultToken('buzz');
   highlighted = highlighterFactory({ className: 'all-special' })([token])(original);
   expected = ul('', [
     li({ key: '1' }, 'foo'),
@@ -117,7 +124,7 @@ test('it can highlight with custom class names', t => {
 test('it can accept multiple tokens', t => {
   t.plan(1);
 
-  const buzzToken = tokenFactory({})('buzz');
+  const buzzToken = defaultToken('buzz');
   const fooToken = tokenFactory({ className: 'special' })('foo');
   const highlighted = highlighterFactory({})([buzzToken, fooToken])(original);
 
@@ -139,7 +146,7 @@ test('it can accept multiple tokens', t => {
 test('it can match with RegEx', t => {
   t.plan(2);
 
-  let token = tokenFactory({})('^b');
+  let token = defaultToken('^b');
   let highlighted = highlighterFactory({})([token])(original);
   let expected = ul('', [
     li({ key: '1' }, 'foo'),
