@@ -2,13 +2,19 @@ const { default: traverse } = require('react-traverse');
 const h = require('react-hyperscript');
 const { i } = require('hyperscript-helpers')(h);
 
-const tokenFactory = ({ className = 'highlight', sensitiveSearch = false }) => highlightText => ({
+const tokenFactory = ({
+  className = 'highlight',
+  sensitiveSearch = false
+}) => highlightText => ({
   token: highlightText.replace(/\|$/, ''),
   className,
   sensitiveSearch
 });
 
-const highlighterFactory = ({ className = null, sensitiveSearch = false }) => tokens => container => {
+const highlighterFactory = ({
+  className = null,
+  sensitiveSearch = false
+}) => tokens => container => {
   return traverse(container, {
     Text(path) {
       if (typeof path.node === 'string') {

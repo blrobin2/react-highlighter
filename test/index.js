@@ -3,8 +3,8 @@ const h = require('react-hyperscript');
 const { i, ul, li, div, span } = require('hyperscript-helpers')(h);
 const ReactDOMServer = require('react-dom/server');
 const { defaultHighlighter, tokenFactory, highlighterFactory } = require('..');
-const Foo = () => div('', span('', 'foo'));
-const highlightedFoo = (className) => div('', span('', i(className, 'foo')));
+const foo = () => div('', span('', 'foo'));
+const highlightedFoo = className => div('', span('', i(className, 'foo')));
 
 const original = ul('', [
   li({ key: '1' }, 'foo'),
@@ -13,12 +13,12 @@ const original = ul('', [
   li({ key: '4' }, 'buZZ'),
   li({ key: '5' }, [
     'buzz',
-    Foo()
+    foo()
   ]),
   li({ key: '6' }, div('', 1))
 ]);
 
-test('it can highlight', function (t) {
+test('it can highlight', t => {
   t.plan(1);
 
   const highlighted = defaultHighlighter(original, 'buzz');
@@ -30,7 +30,7 @@ test('it can highlight', function (t) {
     li({ key: '4' }, i('.highlight', 'buZZ')),
     li({ key: '5' }, [
       i('.highlight', 'buzz'),
-      Foo()
+      foo()
     ]),
     li({ key: '6' }, div('', 1))
   ]);
@@ -38,7 +38,7 @@ test('it can highlight', function (t) {
   domsRenderEqually(t, highlighted, expected);
 });
 
-test('it can highlight case-sensitive', function (t) {
+test('it can highlight case-sensitive', t => {
   t.plan(2);
 
   let token = tokenFactory({})('buzz');
@@ -50,7 +50,7 @@ test('it can highlight case-sensitive', function (t) {
     li({ key: '4' }, 'buZZ'),
     li({ key: '5' }, [
       i('.highlight', 'buzz'),
-      Foo()
+      foo()
     ]),
     li({ key: '6' }, div('', 1))
   ]);
@@ -63,7 +63,7 @@ test('it can highlight case-sensitive', function (t) {
   domsRenderEqually(t, highlighted, expected);
 });
 
-test('it can highlight with custom class names', function (t) {
+test('it can highlight with custom class names', t => {
   t.plan(3);
 
   let token = tokenFactory({ className: 'special' })('buzz');
@@ -75,7 +75,7 @@ test('it can highlight with custom class names', function (t) {
     li({ key: '4' }, i('.special', 'buZZ')),
     li({ key: '5' }, [
       i('.special', 'buzz'),
-      Foo()
+      foo()
     ]),
     li({ key: '6' }, div('', 1))
   ]);
@@ -90,7 +90,7 @@ test('it can highlight with custom class names', function (t) {
     li({ key: '4' }, i('.special.all-special', 'buZZ')),
     li({ key: '5' }, [
       i('.special.all-special', 'buzz'),
-      Foo()
+      foo()
     ]),
     li({ key: '6' }, div('', 1))
   ]);
@@ -106,7 +106,7 @@ test('it can highlight with custom class names', function (t) {
     li({ key: '4' }, i('.highlight.all-special', 'buZZ')),
     li({ key: '5' }, [
       i('.highlight.all-special', 'buzz'),
-      Foo()
+      foo()
     ]),
     li({ key: '6' }, div('', 1))
   ]);
@@ -114,14 +114,14 @@ test('it can highlight with custom class names', function (t) {
   domsRenderEqually(t, highlighted, expected);
 });
 
-test('it can accept multiple tokens', function (t) {
+test('it can accept multiple tokens', t => {
   t.plan(1);
 
   const buzzToken = tokenFactory({})('buzz');
   const fooToken = tokenFactory({ className: 'special' })('foo');
   const highlighted = highlighterFactory({})([buzzToken, fooToken])(original);
 
-  expected = ul('', [
+  const expected = ul('', [
     li({ key: '1' }, i('.special', 'foo')),
     li({ key: '2' }, 'Bar'),
     li({ key: '3' }, 'BAZ'),
@@ -136,7 +136,7 @@ test('it can accept multiple tokens', function (t) {
   domsRenderEqually(t, highlighted, expected);
 });
 
-test('it can match with RegEx', function (t) {
+test('it can match with RegEx', t => {
   t.plan(2);
 
   let token = tokenFactory({})('^b');
@@ -149,7 +149,7 @@ test('it can match with RegEx', function (t) {
     li({ key: '5' }, [
       i('.highlight', 'b'),
       'uzz',
-      Foo()
+      foo()
     ]),
     li({ key: '6' }, div('', 1))
   ]);
@@ -166,7 +166,7 @@ test('it can match with RegEx', function (t) {
     li({ key: '5' }, [
       i('.highlight', 'b'),
       'uzz',
-      Foo()
+      foo()
     ]),
     li({ key: '6' }, div('', 1))
   ]);
