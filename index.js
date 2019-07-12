@@ -2,6 +2,13 @@ const { default: traverse } = require('react-traverse');
 const h = require('react-hyperscript');
 const { i } = require('hyperscript-helpers')(h);
 
+// Type Token = { token: string, className: string, senstiveSearch: boolean }
+
+/*
+ * Function: tokenFactory :: { className?: string, sensitiveSearch?: boolean }
+ *             -> highlightText: string
+ *             -> Token
+ */
 const tokenFactory = ({
   className = 'highlight',
   sensitiveSearch = false
@@ -11,6 +18,12 @@ const tokenFactory = ({
   sensitiveSearch
 });
 
+/*
+ * Function: highlighterFactory :: { className?: string, sensitiveSearch?: boolean }
+ *                              -> tokens: Token[]
+ *                              -> container: HtmlElement
+ *                              -> HtmlElement
+ */
 const highlighterFactory = ({
   className = null,
   sensitiveSearch = false
@@ -25,6 +38,15 @@ const highlighterFactory = ({
   })
 };
 
+/**
+ * Uses the given tokens and options to parse textContent and return a tree
+ * with the matching cases highlighted
+ * @param {string} node The text content to parse
+ * @param {Array.<Token>} tokens The tokens for matching
+ * @param {string} classNameAll The class name for every matching element
+ * @param {boolean} sensitiveSearchAll Whether or not to peform a case-sensitive search
+ * @returns {HtmlElement} The DOM with given tokens highlighted
+ */
 function checkAndReplace(node, tokens, classNameAll, sensitiveSearchAll) {
   return tokens.reduce((newText, { token, className, sensitiveSearch }) => {
     const classList = classNameAll ? [className, classNameAll] : [className];
@@ -34,6 +56,15 @@ function checkAndReplace(node, tokens, classNameAll, sensitiveSearchAll) {
   }, node);
 }
 
+/**
+ * Uses the given token and options to parse textContent and return a tree
+ * with the matching cases highlighted
+ * @param {string} nodeValue // The text content to search
+ * @param {string} token The text or regex on which to match
+ * @param {Array.<string>} classList The classes to apply to the match case
+ * @param {boolean} sensitiveSearch Whether to use sensitive search
+ * @returns {HtmlElement} The matches for the given token
+ */
 function checkToken(nodeValue, token, classList, sensitiveSearch) {
   const go = (newText, remainingText, isFirst) => {
     const flags = sensitiveSearch ? 'gm' : 'igm';
