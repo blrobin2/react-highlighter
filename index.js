@@ -49,9 +49,8 @@ const highlighterFactory = ({
  */
 function checkAndReplace(node, tokens, classNameAll, sensitiveSearchAll) {
   return tokens.reduce((newText, { token, className, sensitiveSearch }) => {
-    const classList = classNameAll ? [className, classNameAll] : [className];
+    const classes = classNameAll ? `.${className} .${classNameAll}` : `.${className}`;
     const finalSensitiveSearch = sensitiveSearchAll ? sensitiveSearchAll : sensitiveSearch;
-    const classes = classList.map(c => `.${c}`).join(' ');
 
     return checkToken(newText, token, classes, finalSensitiveSearch);
   }, node);
